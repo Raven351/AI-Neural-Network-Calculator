@@ -94,5 +94,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NNObjectsLib\NNObjectsLib.csproj">
+      <Project>{9eb30896-a340-43a5-8852-70496d978b0b}</Project>
+      <Name>NNObjectsLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
