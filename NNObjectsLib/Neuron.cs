@@ -4,6 +4,9 @@ using System.ComponentModel;
 
 namespace NNObjectsLib
 {
+    /// <summary>
+    /// Represents neuron in neural network.
+    /// </summary>
     public class Neuron : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -23,16 +26,22 @@ namespace NNObjectsLib
             }
         }
         public ObservableCollection<double> Weights;
-        public ObservableCollection<PrimitiveWrapper> Weights2;
         #endregion
 
         #region CONSTRUCTORS
+        /// <summary>
+        /// Creates neuron object without any values.
+        /// </summary>
         public Neuron()
         {
             WeightsCount = 0;
             Weights = new ObservableCollection<double>();
         }
 
+        /// <summary>
+        /// Creates neuron object with given weight.
+        /// </summary>
+        /// <param name="weight">Weight value</param>
         public Neuron(double weight)
         {
             WeightsCount = 0;

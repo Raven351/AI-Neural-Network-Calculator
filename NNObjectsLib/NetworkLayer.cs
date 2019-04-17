@@ -2,6 +2,9 @@
 
 namespace NNObjectsLib
 {
+    /// <summary>
+    /// Represents network layer in neural network.
+    /// </summary>
     class NetworkLayer
     {
         public int LayerNumber { get; set; }
