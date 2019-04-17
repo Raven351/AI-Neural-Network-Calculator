@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:SINeuralNetworkCalculator"
         mc:Ignorable="d"
         Title="SI Neural Network Calculator" Height="450" Width="800" ResizeMode="NoResize">
+    <Window.Resources>
+
+    </Window.Resources>
     <StackPanel>
         <DockPanel Height="25">
             <Menu DockPanel.Dock="Top" Height="25">
@@ -17,53 +20,83 @@
             </Menu>
             <StackPanel></StackPanel>
         </DockPanel>
-        <TabControl Height="420">
-            <TabItem Header="Neuron Creator">
+        <TabControl Height="395">
+            <TabItem Header="Neuron Creator"> 
                 <Grid Background="#FFE5E5E5">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-                        <GroupBox Header="Neuron modification" HorizontalAlignment="Left" Height="111" Margin="10,10,0,0" 
-                                  VerticalAlignment="Top" Width="375" Grid.Column="1"/>
-                        <Label Content="Input weight:" HorizontalAlignment="Left" Margin="22,35,0,0" 
-                               VerticalAlignment="Top" Grid.Column="1"/>
-                        <TextBox x:Name="inputWeightTextBox" HorizontalAlignment="Left" Height="23" Margin="107,38,0,0" 
-                                 TextWrapping="Wrap" VerticalAlignment="Top" Width="268" Grid.Column="1" PreviewTextInput="InputWeightTextBox_PreviewTextInput" 
-                                 PreviewKeyDown="InputWeightTextBox_PreviewKeyDown"/>
-                        <Button x:Name="addWeightButton" Content="Add to selected neuron" HorizontalAlignment="Left" Margin="220,77,0,0" 
-                                VerticalAlignment="Top" Width="155" Height="28" Grid.Column="1" Click="AddWeightButton_Click" IsEnabled="False"/>
-                        <Button x:Name="createNeuronButton" Content="Create new neuron" HorizontalAlignment="Left" Margin="33,77,0,0" 
-                                VerticalAlignment="Top" Width="155" Height="28" Grid.Column="1" Click="CreateNeuronButton_Click" IsEnabled="{Binding ElementName=inputWeightTextBox, Path=Text.Length}"/>
-                        <GroupBox Header="Weights" HorizontalAlignment="Left" Height="234" Margin="10,126,0,0" 
-                                  VerticalAlignment="Top" Width="375" Grid.Column="1"/>
-                        <ListView x:Name="weightsListView" HorizontalAlignment="Left" Height="200" Margin="22,151,0,0" VerticalAlignment="Top" Width="353" Grid.Column="1"
-                                  >
-                            <ListView.View>
-                                <GridView>
-                                    <GridView.ColumnHeaderContainerStyle>
-                                        <Style>
-                                            <Setter Property="TextElement.FontSize" Value="20"></Setter>
-                                        </Style>
-                                    </GridView.ColumnHeaderContainerStyle>
-                                    <GridViewColumn Header="Value" Width="175" DisplayMemberBinding="{Binding Neuron}">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <ItemsControl ItemsSource="{Binding Weights}" Width="175"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                        <GroupBox Header="Created neurons:" HorizontalAlignment="Left" Height="350" Margin="10,10,0,0" 
-                                  VerticalAlignment="Top" Width="375"/>
-
-                        <TreeView HorizontalAlignment="Left" Height="316" Margin="22,35,0,0" VerticalAlignment="Top" Width="350"/>
-
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="94*"/>
                             <ColumnDefinition Width="95*"/>
                         </Grid.ColumnDefinitions>
-                    </Grid>
+                        
+                        <GroupBox Header="Weight editor" Margin="10,10,10,242" FontSize="13">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0">
+                                <Label Content="Input weight:" HorizontalAlignment="Left" Margin="10,9,0,0" 
+                               VerticalAlignment="Top"/>
+                                <TextBox x:Name="inputWeightTextBox" Height="23" Margin="10,40,0,0" 
+                                 TextWrapping="Wrap" VerticalAlignment="Top" PreviewTextInput="InputWeightTextBox_PreviewTextInput" 
+                                 PreviewKeyDown="InputWeightTextBox_PreviewKeyDown" HorizontalAlignment="Left" Width="121" TextChanged="InputWeightTextBox_TextChanged"/>
+                                <Button x:Name="addWeightButton" Content="Add to selected neuron" HorizontalAlignment="Left" Margin="183,35,0,0" 
+                                VerticalAlignment="Top" Width="155" Height="28" Click="AddWeightButton_Click" IsEnabled="{Binding ElementName=inputWeightTextBox, Path=Text.Length}"/>
+                                <Button x:Name="createNeuronButton" Content="Create new neuron" HorizontalAlignment="Left" Margin="183,0,0,0" 
+                                VerticalAlignment="Top" Width="155" Height="28" Click="CreateNeuronButton_Click" IsEnabled="{Binding ElementName=inputWeightTextBox, Path=Text.Length}"/>
+                            </Grid>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Weights" Margin="10,130,10,10">
+                            <Grid>
+                                <ListView x:Name="weightsListView" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _selectedNeuron.Weights}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
 
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="50" Height="50">
+                                                <Ellipse Stroke="Black"/>
+                                                <TextBlock HorizontalAlignment="Center" Text="{Binding}" TextAlignment="Center" VerticalAlignment="Center" FontSize="15"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <!--<Ellipse Margin="2" Fill="Beige" Width="50" Height="50"/>-->
+                                </ListView>
+                            </Grid>
+                        </GroupBox>
+                        
+                        <GroupBox Header="Created neurons:" Margin="10" Grid.Column="1">
+                            <Grid>
+                                <Grid>
+                                    <ListView x:Name="neuronsListView" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _neurons.NeuronsList}" 
+                                              SelectionChanged="NeuronsListView_SelectionChanged" SelectionMode="Single">
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Width="50" Height="100" Margin="2">
+                                                    <Rectangle Stroke="Black"/>
+                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding WeightsCount}" FontSize="15"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </Grid>
+                        </GroupBox>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Test">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="79*"/>
+                        <ColumnDefinition Width="118*"/>
+                    </Grid.ColumnDefinitions>
                 </Grid>
             </TabItem>
         </TabControl>
