@@ -26,12 +26,14 @@ namespace SINeuralNetworkCalculator
     {
         #region FIELDS
         private readonly Neurons _neurons = new Neurons();
+        private readonly NeuralNetworks _neuralNetworks = new NeuralNetworks();
         #endregion
 
         public MainWindow()
         {
             InitializeComponent();
-            neuronsListView.ItemsSource = _neurons.NeuronsList;
+            InitializeViews();
+            
         }
 
        
@@ -72,6 +74,22 @@ namespace SINeuralNetworkCalculator
         private void InputWeightTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             addWeightButton.IsEnabled = inputWeightTextBox.Text.Length > 0 && neuronsListView.SelectedItem != null;
+        }
+
+        private void InitializeViews()
+        {
+            neuronsListView.ItemsSource = _neurons.NeuronsList;
+            neuronsListViewNeuralNetworkCreator.ItemsSource = _neurons.NeuronsList;
+            neuralNetworksTreeView.ItemsSource = _neuralNetworks.NeuralNetworksList;
+            
+        }
+
+        private void CreateNeuralNetworkButton_click(object sender, RoutedEventArgs e)
+        {
+            var neuralNetwork = new NeuralNetwork(int.Parse(layersCountTextBox.Text), double.Parse(biasTextBox.Text));
+            _neuralNetworks.NeuralNetworksList.Add(neuralNetwork);
+            layersCountTextBox.Clear();
+            biasTextBox.Clear();
         }
     }
 }

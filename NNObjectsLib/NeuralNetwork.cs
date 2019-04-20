@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NNObjectsLib
 {
-    class NeuralNetwork
+    public class NeuralNetwork
     {
         #region CONSTRUCTORS
         /// <summary>
@@ -16,14 +16,17 @@ namespace NNObjectsLib
             Layers = new List<NetworkLayer>();
         }
 
-        public NeuralNetwork(int vectorsCount, int layersCount, List<double> vectors, double bias, List<NetworkLayer> layers)
+        public NeuralNetwork(int layersCount, double bias) : this()
         {
-            VectorsCount = vectorsCount;
             LayersCount = layersCount;
-            Vectors = vectors;
             Bias = bias;
-            Layers = layers;
+            for (int i = 0; i<layersCount; i++)
+            {
+                Layers.Add(new NetworkLayer(i+1));
+            }
         }
+
+
         #endregion
 
         #region PROPS

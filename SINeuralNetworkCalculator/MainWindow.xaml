@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SINeuralNetworkCalculator"
         mc:Ignorable="d"
-        Title="SI Neural Network Calculator" Height="450" Width="800" ResizeMode="CanResize" MinWidth="800" MinHeight="450">
+        Title="SI Neural Network Calculator" Height="700" Width="1300" ResizeMode="CanResize" MinWidth="800" MinHeight="450">
     <Window.Resources>
 
     </Window.Resources>
@@ -33,7 +33,7 @@
                             <ColumnDefinition Width="94*"/>
                             <ColumnDefinition Width="95*"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <GroupBox Header="Weight editor" Margin="10,10,10,0" FontSize="13" Height="114" VerticalAlignment="Top">
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,10,0,0">
                                 <Label Content="Input weight:" HorizontalAlignment="Left" Margin="10,9,0,0" 
@@ -98,10 +98,42 @@
             </TabItem>
             <TabItem Header="Neural Network Creator">
                 <Grid Background="#FFE5E5E5">
-                    <GroupBox Header="Created neurons:" Margin="10,10,550,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250*"/>
+                        <ColumnDefinition Width="707*"/>
+                        <ColumnDefinition Width="329*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="700*"/>
+                        </Grid.RowDefinitions>
+                        <GroupBox Header="Neural Network Creator" Grid.Column="0" Grid.Row="0" Height="193" VerticalAlignment="Top">
+                            <Grid>
+                                <Label Content="Vector X count:" Margin="10,10,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
+                                <TextBox Margin="116,10,10,0" Height="27" VerticalAlignment="Top"/>
+                                <Label Content="Layers count:" Margin="10,51,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
+                                <TextBox x:Name="layersCountTextBox" Margin="116,51,10,0" Height="27" VerticalAlignment="Top"/>
+                                <Label Content="Bias value:" Margin="10,92,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
+                                <TextBox x:Name="biasTextBox" Margin="116,91, 10, 0" Height="27" VerticalAlignment="Top"/>
+                                <Button Height="27" x:Name="createNeuralNetworkButton" Content="Create neural network" VerticalAlignment="Top" Margin="10,133,10,0" Click="CreateNeuralNetworkButton_click"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="Neural Networks" Grid.Column="0" Margin="0,198,0,10">
+                            <TreeView x:Name="neuralNetworksTreeView" Margin="7">
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                        <TextBlock Text="{Binding LayersCount}"/>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+
+                            </TreeView>
+                        </GroupBox>
+
+                    </Grid>
+                    <GroupBox Header="Neurons" Grid.Column="2">
                         <Grid>
-                            <ListView x:Name="neuronsListViewNeuralNetworkCreator" Margin="10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _neurons.NeuronsList}" 
-                                        SelectionChanged="NeuronsListView_SelectionChanged" SelectionMode="Single">
+                            <ListView x:Name="neuronsListViewNeuralNetworkCreator" Margin="10,10,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _neurons.NeuronsList}" 
+                                        SelectionMode="Single" Height="310" VerticalAlignment="Top">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
@@ -115,6 +147,23 @@
                                         </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
+                            </ListView>
+                            <ListView x:Name="weightsListViewNeuralNetworkCreator" Margin="10,335,10,10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _selectedNeuron.Weights}">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="50" Height="50">
+                                            <Ellipse Stroke="Black"/>
+                                            <TextBlock HorizontalAlignment="Center" Text="{Binding}" TextAlignment="Center" VerticalAlignment="Center" FontSize="15"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <!--<Ellipse Margin="2" Fill="Beige" Width="50" Height="50"/>-->
                             </ListView>
                         </Grid>
                     </GroupBox>
