@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SINeuralNetworkCalculator"
+        xmlns:NNObjectsLib="clr-namespace:NNObjectsLib;assembly=SINeuralNetworkCalculator"
         mc:Ignorable="d"
         Title="SI Neural Network Calculator" Height="700" Width="1300" ResizeMode="CanResize" MinWidth="800" MinHeight="450">
     <Window.Resources>
@@ -107,33 +108,101 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="700*"/>
                         </Grid.RowDefinitions>
-                        <GroupBox Header="Neural Network Creator" Grid.Column="0" Grid.Row="0" Height="193" VerticalAlignment="Top">
+                        <GroupBox Header="Neural Network Creator" Grid.Column="0" Grid.Row="0" Height="155" VerticalAlignment="Top">
                             <Grid>
-                                <Label Content="Vector X count:" Margin="10,10,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
-                                <TextBox Margin="116,10,10,0" Height="27" VerticalAlignment="Top"/>
-                                <Label Content="Layers count:" Margin="10,51,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
-                                <TextBox x:Name="layersCountTextBox" Margin="116,51,10,0" Height="27" VerticalAlignment="Top"/>
-                                <Label Content="Bias value:" Margin="10,92,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
-                                <TextBox x:Name="biasTextBox" Margin="116,91, 10, 0" Height="27" VerticalAlignment="Top"/>
-                                <Button Height="27" x:Name="createNeuralNetworkButton" Content="Create neural network" VerticalAlignment="Top" Margin="10,133,10,0" Click="CreateNeuralNetworkButton_click"/>
+                                <Label Content="Layers count:" Margin="10,12,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
+                                <TextBox x:Name="layersCountTextBox" Margin="116,12,10,0" Height="27" VerticalAlignment="Top"/>
+                                <Label Content="Bias value:" Margin="10,53,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101"/>
+                                <TextBox x:Name="biasTextBox" Margin="116,52,10,0" Height="27" VerticalAlignment="Top"/>
+                                <Button Height="27" x:Name="createNeuralNetworkButton" Content="Create neural network" VerticalAlignment="Top" Margin="10,94,10,0" Click="CreateNeuralNetworkButton_click"/>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Header="Neural Networks" Grid.Column="0" Margin="0,198,0,10">
-                            <TreeView x:Name="neuralNetworksTreeView" Margin="7">
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                                        <TextBlock Text="{Binding LayersCount}"/>
+                        <GroupBox Header="Neural Networks" Grid.Column="0" Margin="0,160,0,10">
+                            <Grid>
+                                <Label Content="Add value to vector X:" Margin="10,12,0,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                <TextBox x:Name="vectorXValueTextBox" Margin="116,12,10,0" Height="27" VerticalAlignment="Top" Width="80" HorizontalAlignment="Right"/>
+                                <Button x:Name="vectorXAddValueButton" Margin="10,50,10,0" VerticalAlignment="Top" Height="22" Content="Add&#xD;&#xA;" Click="VectorXAddValueButton_Click" IsEnabled="False"/>
+                                <ListView x:Name="neuralNetworksListView" Margin="10,80,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _neuralNetworks.NeuralNetworksList}" 
+                                        SelectionMode="Single" SelectionChanged="NeuralNetworksListView_SelectionChanged">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Width="150" Height="50" Margin="2">
+                                                <Rectangle Stroke="Blue" StrokeThickness="2"/>
+                                                <StackPanel Orientation="Vertical" Margin="2">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Layers count: " FontSize="15"/>
+                                                        <TextBlock Text="{Binding LayersCount}" FontSize="15"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Bias value: " FontSize="15"/>
+                                                        <TextBlock Text="{Binding Bias}" FontSize="15"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            <!--<TreeView x:Name="neuralNetworksTreeView" Margin="7">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:MainWindow}" ItemsSource="{Binding}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Neural network [Layers: "/>
+                                            <TextBlock Text="{Binding LayersCount}"/>
+                                            <TextBlock Text=" | Bias: "/>
+                                            <TextBlock Text="{Binding Bias}"/>
+                                            <TextBlock Text=" ]"/>
+                                        </StackPanel>
                                     </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
+                                </TreeView.Resources>
 
-                            </TreeView>
+                            </TreeView>-->
                         </GroupBox>
 
                     </Grid>
-                    <GroupBox Header="Neurons" Grid.Column="2">
+                    <GroupBox Header="Neural network" Grid.Column="1" Margin="10, 0, 10, 10">
                         <Grid>
-                            <ListView x:Name="neuronsListViewNeuralNetworkCreator" Margin="10,10,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _neurons.NeuronsList}" 
-                                        SelectionMode="Single" Height="310" VerticalAlignment="Top">
+                            <ListView x:Name="neuralNetworkVectorXValues" Height="70" VerticalAlignment="Top" Margin="7,7,7,0">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="60" Height="60">
+                                            <Ellipse Stroke="Black"/>
+                                            <TextBlock Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <ListView x:Name="neuralNetworkListView" Margin="7,82,7,7" SelectionMode="Single" ItemsSource="{Binding}" SelectionChanged="NeuralNetworkListView_SelectionChanged">
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel IsItemsHost="True" Orientation="Vertical"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Width="600" Height="200">
+                                            <Rectangle Stroke="Black"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Neurons" Grid.Column="2" Margin="0,0,0, 10">
+                        <Grid>
+                            <Button x:Name="addNeuronToLayerButton" VerticalAlignment="Top" Height="35" Margin="10" Content="Add neuron to selected layer" Click="AddNeuronToLayerBtnClick" IsEnabled="False"/>
+                            <ListView x:Name="neuronsListViewNeuralNetworkCreator" Margin="10,57,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _neurons.NeuronsList}" 
+                                        SelectionMode="Single" Height="310" VerticalAlignment="Top" SelectionChanged="NeuronsListViewNeuralNetworkCreator_SelectionChanged">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
@@ -148,13 +217,12 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <ListView x:Name="weightsListViewNeuralNetworkCreator" Margin="10,335,10,10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _selectedNeuron.Weights}">
+                            <ListView x:Name="weightsListViewNeuralNetworkCreator" Margin="10,372,10,10" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="White" ItemsSource="{Binding _selectedNeuron.Weights}">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
-
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Width="50" Height="50">
