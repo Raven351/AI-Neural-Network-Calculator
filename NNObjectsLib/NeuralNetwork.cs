@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace NNObjectsLib
@@ -12,8 +13,8 @@ namespace NNObjectsLib
         /// </summary>
         public NeuralNetwork()
         {
-            Vectors = new List<double>();
-            Layers = new List<NetworkLayer>();
+            Vectors = new ObservableCollection<double>();
+            Layers = new ObservableCollection<NetworkLayer>();
         }
 
         public NeuralNetwork(int layersCount, double bias) : this()
@@ -32,9 +33,9 @@ namespace NNObjectsLib
         #region PROPS
         public int VectorsCount { get; set; }
         public int LayersCount { get; set; }
-        public List<double> Vectors { get; set; }
+        public ObservableCollection<double> Vectors { get; set; }
         public double Bias { get; set; }
-        public List<NetworkLayer> Layers { get; set; }
+        public ObservableCollection<NetworkLayer> Layers { get; set; }
         #endregion
     }
 }
