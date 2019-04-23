@@ -26,6 +26,7 @@ namespace NNObjectsLib
             }
         }
         public ObservableCollection<double> Weights;
+        public double NetValue { get; set; }
         #endregion
 
         #region CONSTRUCTORS

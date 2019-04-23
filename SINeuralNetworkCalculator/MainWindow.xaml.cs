@@ -33,9 +33,9 @@ namespace SINeuralNetworkCalculator
         public MainWindow()
         {
             InitializeComponent();
-            InitializeViews(); 
+            InitializeViews();
         }
- 
+
         private void AddWeightButton_Click(object sender, RoutedEventArgs e)
         {
             _neurons[neuronsListView.SelectedIndex].Weights.Add(double.Parse(inputWeightTextBox.Text));
@@ -50,7 +50,7 @@ namespace SINeuralNetworkCalculator
             _neurons.NeuronsList.Add(neuron);
             neuronsListView.SelectedIndex = _neurons.NeuronsList.Count - 1;
             inputWeightTextBox.Clear();
-            
+
         }
 
         private void InputWeightTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -75,7 +75,7 @@ namespace SINeuralNetworkCalculator
             neuronsListView.ItemsSource = _neurons.NeuronsList;
             neuronsListView.ItemsSource = _neurons.NeuronsList;
             neuralNetworksListView.ItemsSource = _neuralNetworks.NeuralNetworksList;
-            
+
         }
 
         private void CreateNeuralNetworkButton_click(object sender, RoutedEventArgs e)
@@ -95,7 +95,8 @@ namespace SINeuralNetworkCalculator
             }
             //Debug.WriteLine(Calculator.NeuronNET(_neuralNetworks[neuralNetworksListView.SelectedIndex].Vectors, _neurons[neuronsListView.SelectedIndex],
             //    _neuralNetworks[neuralNetworksListView.SelectedIndex].Bias));
-            
+            Debug.WriteLine(Convert.ToString(Calculator.ContinuousUnipolar(-0.5)));
+
         }
 
         private void NeuralNetworksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -117,12 +118,12 @@ namespace SINeuralNetworkCalculator
             {
                 addNeuronToLayerButton.IsEnabled = true;
             }
-            if (neuralNetworkListView.SelectedIndex !=-1)
+            if (neuralNetworkListView.SelectedIndex != -1)
             {
                 neuralNetworksNeurons.ItemsSource = _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers[neuralNetworkListView.SelectedIndex].NeuronsList;
             }
 
-            
+
         }
 
         private void VectorXAddValueButton_Click(object sender, RoutedEventArgs e)
@@ -132,8 +133,10 @@ namespace SINeuralNetworkCalculator
 
         private void NeuralNetworksNeurons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            neuralNetworkNeuronsWeightsListView.ItemsSource = 
+            neuralNetworkNeuronsWeightsListView.ItemsSource =
                 _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers[neuralNetworkListView.SelectedIndex].NeuronsList[neuralNetworksNeurons.SelectedIndex].Weights;
         }
+
+
     }
 }
