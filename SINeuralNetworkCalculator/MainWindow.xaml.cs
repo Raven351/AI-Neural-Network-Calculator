@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -49,7 +50,7 @@ namespace SINeuralNetworkCalculator
             _neurons.NeuronsList.Add(neuron);
             neuronsListView.SelectedIndex = _neurons.NeuronsList.Count - 1;
             inputWeightTextBox.Clear();
-            weightsListView.ItemsSource = _neurons[neuronsListView.SelectedIndex].Weights; //selected neuron
+            
         }
 
         private void InputWeightTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -64,11 +65,6 @@ namespace SINeuralNetworkCalculator
             e.Handled = !(key >= (int)Key.D0 && key <= (int)Key.D9 || key >= (int)Key.NumPad0 && key <= (int)Key.NumPad9 || key == (int)Key.Back); //only numeric keys and backspace allowed
         }
 
-        private void NeuronsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            weightsListView.ItemsSource = _neurons[neuronsListView.SelectedIndex].Weights; // selected neuron
-        }
-
         private void InputWeightTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             addWeightButton.IsEnabled = inputWeightTextBox.Text.Length > 0 && neuronsListView.SelectedItem != null;
@@ -77,7 +73,7 @@ namespace SINeuralNetworkCalculator
         private void InitializeViews()
         {
             neuronsListView.ItemsSource = _neurons.NeuronsList;
-            neuronsListViewNeuralNetworkCreator.ItemsSource = _neurons.NeuronsList;
+            neuronsListView.ItemsSource = _neurons.NeuronsList;
             neuralNetworksListView.ItemsSource = _neuralNetworks.NeuralNetworksList;
             
         }
@@ -90,38 +86,54 @@ namespace SINeuralNetworkCalculator
             biasTextBox.Clear();
         }
 
-        private void NeuronsListViewNeuralNetworkCreator_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void NeuronsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            weightsListViewNeuralNetworkCreator.ItemsSource = _neurons[neuronsListViewNeuralNetworkCreator.SelectedIndex].Weights;
+            weightsListView.ItemsSource = _neurons[neuronsListView.SelectedIndex].Weights;
             if (neuralNetworkListView.SelectedIndex != -1)
             {
                 addNeuronToLayerButton.IsEnabled = true;
             }
+            //Debug.WriteLine(Calculator.NeuronNET(_neuralNetworks[neuralNetworksListView.SelectedIndex].Vectors, _neurons[neuronsListView.SelectedIndex],
+            //    _neuralNetworks[neuralNetworksListView.SelectedIndex].Bias));
+            
         }
 
         private void NeuralNetworksListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             neuralNetworkListView.ItemsSource = _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers;
             neuralNetworkVectorXValues.ItemsSource = _neuralNetworks[neuralNetworksListView.SelectedIndex].Vectors;
+            neuralNetworksNeurons.ItemsSource = null;
             vectorXAddValueButton.IsEnabled = true;
         }
 
         private void AddNeuronToLayerBtnClick(object sender, RoutedEventArgs e)
         {
-            _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers[neuralNetworkListView.SelectedIndex].NeuronsList.Add(_neurons[neuronsListViewNeuralNetworkCreator.SelectedIndex]);
+            _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers[neuralNetworkListView.SelectedIndex].NeuronsList.Add(_neurons[neuronsListView.SelectedIndex]);
         }
 
         private void NeuralNetworkListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (neuronsListViewNeuralNetworkCreator.SelectedIndex != -1)
+            if (neuronsListView.SelectedIndex != -1)
             {
                 addNeuronToLayerButton.IsEnabled = true;
             }
+            if (neuralNetworkListView.SelectedIndex !=-1)
+            {
+                neuralNetworksNeurons.ItemsSource = _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers[neuralNetworkListView.SelectedIndex].NeuronsList;
+            }
+
+            
         }
 
         private void VectorXAddValueButton_Click(object sender, RoutedEventArgs e)
         {
             _neuralNetworks[neuralNetworksListView.SelectedIndex].Vectors.Add(double.Parse(vectorXValueTextBox.Text));
+        }
+
+        private void NeuralNetworksNeurons_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            neuralNetworkNeuronsWeightsListView.ItemsSource = 
+                _neuralNetworks[neuralNetworksListView.SelectedIndex].Layers[neuralNetworkListView.SelectedIndex].NeuronsList[neuralNetworksNeurons.SelectedIndex].Weights;
         }
     }
 }
